@@ -1,0 +1,553 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Hmart - About Us
+{% endblock title %}
+
+
+{% block content %}
+
+<!-- offcanvas overlay start -->
+<div class="offcanvas-overlay"></div>
+<!-- offcanvas overlay end -->
+<!-- OffCanvas Wishlist Start -->
+<div id="offcanvas-wishlist" class="offcanvas offcanvas-wishlist">
+    <div class="inner">
+        <div class="head">
+            <span class="title">Wishlist</span>
+            <button class="offcanvas-close">×</button>
+        </div>
+        <div class="body customScroll">
+            <ul class="minicart-product-list">
+                {% for prod in products_wishlist %}
+                <li>
+                    <a href="{% url 'single_product' prod.product.id %}" class="image"><img src="{{prod.product.images.image.url}}" alt="Cart product Image"></a>
+                    <div class="content">
+                        <a href="{% url 'single_product' prod.product.id %}" class="title">{{prod.product.title}}</a>
+                        {% if prod.product.discount > 0 %}
+                        <span class="quantity-price"><span class="amount"><s>${{prod.product.price}}</s> - ${{prod.product.discount_price}}</span></span>
+                        {% else %}
+                        <span class="quantity-price"><span class="amount">${{prod.product.price}}</span></span>
+                        {% endif %}
+                        <a href="{% url 'delete_wishlist' prod.product.id %}" class="remove">×</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="foot">
+            <div class="buttons">
+                <a href="{% url 'wishlist' %}" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- OffCanvas Wishlist End -->
+
+<!-- OffCanvas Cart Start -->
+<div id="offcanvas-cart" class="offcanvas offcanvas-cart">
+    <div class="inner">
+        <div class="head">
+            <span class="title">Cart</span>
+            <button class="offcanvas-close">×</button>
+        </div>
+        <div class="body customScroll">
+            <ul class="minicart-product-list">
+                {% for product in products_cart %}
+                <li>
+                    <a href="{% url 'single_product' product.product.id %}" class="image"><img src="{{product.product.images.image.url}}" alt="Cart product Image"></a>
+                    <div class="content">
+                        <a href="{% url 'single_product' product.product.id %}" class="title">{{product.product.title}}</a>
+                        {% if product.product.discount > 0 %}
+                        <span class="quantity-price">{{product.count}} x <span class="amount"><s>${{product.product.price}}</s> - ${{product.product.discount_price}}</span></span>
+                        {% else %}
+                        <span class="quantity-price">{{product.count}} x <span class="amount">${{product.product.price}}</span></span>
+                        {% endif %}
+                        <a href="{% url 'delete_item' product.product.id %}" class="remove">×</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="foot">
+            <div class="buttons mt-30px">
+                <a href="{% url 'cart' %}" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
+                <a href="{% url 'checkout' %}" class="btn btn-outline-dark current-btn">checkout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Hero/Intro Slider Start -->
+        <div class="section ">
+            <div class="hero-slider swiper-container slider-nav-style-1 slider-dot-style-1">
+                <!-- Hero slider Active -->
+                <div class="swiper-wrapper">
+                        
+                    <!-- Single slider item -->
+                    {% for banner in banner_list %}
+                    <div class="hero-slide-item slider-height swiper-slide bg-color1" data-bg-image="{{banner.bg_image.url}}">
+                        <div class="container h-100">
+                            <div class="row h-100">
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center sm-center-view">
+                                    <div class="hero-slide-content slider-animated-1">
+                                        <span class="category">Welcome To Hmart</span>
+                                        <h2 class="title-1">{{banner.title}}<br>
+                                        {% comment %} Smart Devices & <br>
+                                         Best Solution </h2> {% endcomment %}
+                                        <a href="{% url 'shop' %}" class="btn btn-primary text-capitalize">Shop All Devices</a>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-center position-relative align-items-end">
+                                    <div class="show-case">
+                                        <div class="hero-slide-image">
+                                            <img style="width:1000; height:300;" src="{{banner.product_image.url}}" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination swiper-pagination-white"></div>
+                <!-- Add Arrows -->
+                <div class="swiper-buttons">
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Hero/Intro Slider End -->
+
+        
+        
+        <!-- Banner Area Start -->
+        <div class="banner-area style-one pt-100px pb-100px">
+            <div class="container">
+                <div class="row">
+                    {% for cat in category %}
+                    
+                    <div class="col-md-6" >
+                        <div class="single-banner nth-child-2 mb-30px mb-lm-30px mt-lm-30px ">
+                            <img style="height: 300px; width: 300px;" src="{{cat.min_prices_product.images.image.url}}" alt="">
+                            <div class="banner-content nth-child-2">
+                                <h3 style="color: rgb(3, 3, 3);" class="title">{{cat.min_prices_product.title}}</h3>
+                                <span style="color: red;" class="category">From ${{cat.min_prices_product.price}}
+                                </span>
+                                <a href="{% url 'shop' %}" class="shop-link"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                   
+                    </div>
+                    {% endfor %}
+
+                    <div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Banner Area End -->
+
+
+        <!-- Product Area Start -->
+        <div class="product-area pb-100px">
+            <div class="container">
+                <!-- Section Title & Tab Start -->
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Tab Start -->
+                        <div class="tab-slider d-md-flex justify-content-md-between align-items-md-center">
+                            <ul class="product-tab-nav nav justify-content-start align-items-center">
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#newarrivals">New Arrivals</button>
+                                </li>
+                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#toprated">Top Rated</button>
+                                </li>
+                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#featured">Featured</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Tab End -->
+                    </div>
+                </div>
+                <!-- Section Title & Tab End -->
+                <div class="row">
+                    <div class="col">
+                        <div class="tab-content mt-60px">
+                            <!-- 1st tab start -->
+                            <div class="tab-pane fade show active" id="newarrivals">
+                                <div class="row mb-n-30px">
+                                    {% for product in products_new %}
+
+                                    <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px">
+                                        <!-- Single Prodect -->
+                                        <div class="product">
+                                            <span class="badges">
+                                                {% comment %} <span class="new">-{{product.discount}}$</span> {% endcomment %}
+                                            </span>
+                                            <div class="thumb">
+                                                <a href="{% url 'single_product' product.id %}" class="image">
+                                                    <img style="height: 250px;" src="{{product.images.image.url}}" alt="Product"/>
+                                                    <img class="hover-image" src="{{product.images.image.url}}" alt="Product" />
+                                                </a>
+                                            </div>
+                                            <div class="content">
+                                                <span class="category"><a href="#">Accessories</a></span>
+                                                <h5 class="title"><a href="{% url 'single_product' product.id %}">{{product.title}}
+                                                    </a>
+                                                </h5>
+                                                <span class="price">
+                                                    {% if product.discount > 0 %}
+                                                    <span class="new"><s>{{product.price}}$</s> - {{product.discount_price}}</span>
+                                                    {% else %}
+                                                    <span class="new">{{product.price}}$</span>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+
+                                    {% endfor %}
+                                </div>          
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Product Area End -->
+        
+        <!-- Fashion Area Start -->
+        {% for advertisem in advertisem_list %}
+        <div class="fashion-area" data-bg-image="{{advertisem.image.url}}">
+            <div class="container h-100">
+                <div class="row justify-content-center align-items-center h-100">
+                    <div class="col-12 text-center">
+                        <h2 class="title"> <span>Smart Fashion</span> With Smart Devices </h2>
+                        <a href="{% url 'shop' %}" class="btn btn-primary text-capitalize m-auto">Shop All Devices</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- Fashion Area End -->
+
+        <div style="margin-top: 50px;"> 
+        <!-- Feature product area start -->
+        <div class="feature-product-area pb-100px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title text-center">
+                            <h2 class="title">Featured Offers</h2>
+                            <p>There are many variations of passages of Lorem Ipsum available</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-product-slider swiper-container slider-nav-style-1">
+                    <div class="swiper-wrapper">
+                        {% for product in products %}
+                        {% if product.discount > 0 %}
+                        <div class="swiper-slide feature-right-content">
+                            <div class="image-side">
+                                <a href="{% url 'single_product' product.id %}"><img style="height: 250px;" src="{{product.images.image.url}}" alt="">
+                                <button title="Add pxo Cart" class="action add-to-cart" data-bs-toggle="modal" data-bs-target="#exampleModal-Cart"><i
+                                    class="pe-7s-shopbag"></i></button>
+                            </div></a>
+                            <div class="content-side">
+                                <div class="deal-timing">
+                                    <span>End In:</span>
+                                    <div data-countdown="2021/09/15"></div>
+                                </div>
+                                <div class="prize-content">
+                                    <h5 class="title"><a href="{% url 'single_product' product.id %}">{{product.title}}</a></h5>
+                                    <span class="price">
+                                <span class="old">${{product.price}}</span>
+                                    <span class="new">${{product.discount_price}}</span>
+                                    </span>
+                                </div>
+                                <div class="product-feature">
+                                    <ul>
+
+                                        <li>Wealth : <span>{{product.information_wealth}}</span></li>
+                                        <li>Count : <span>{{product.count}}</span></li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- Add Arrows -->
+                    <div class="swiper-buttons">
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Feature product area End -->
+        <!-- Testimonial area start -->
+        <div class="trstimonial-area pt-100px pb-100px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title text-center m-0">
+                            <h2 class="title">Client Feedback</h2>
+                            <p>There are many variations of passages of Lorem Ipsum available</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Swiper -->
+                        <div class="swiper-container content-top slider-nav-style-1">
+                            <div class="swiper-wrapper">
+                                {% for contact in contacts %}
+                                <div class="swiper-slide">
+                                    <div class="testi-inner">
+                                        <div class="testi-content">
+                                            <p>{{contact.body}}
+                                            </p>
+                                        </div>
+                                        <div class="testi-author">
+                                            <div class="author-image">
+                                                <img class="img-responsive" src="{% static 'assets/images/testimonial/1.png' %}" alt="">
+                                            </div>
+                                            <div class="author-name">
+                                                <h4 class="name">{{contact.owner}}<span>Client</span></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% endfor %}
+                            </div>
+                            <!-- Add Arrows -->
+                            <div class="swiper-buttons">
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Testimonial area end-->
+
+        <!-- Brand area start -->
+        <div class="brand-area pt-100px pb-100px">
+            <div class="container">
+                <div class="brand-slider swiper-container">
+                    <div class="swiper-wrapper align-items-center">
+                        {% for brand in brand_list %}
+                        <div class="swiper-slide brand-slider-item text-center">
+                            <a href="{% url 'detail_brand' brand.id %}"><img class=" img-fluid" style="height: 120px;" src="{{brand.image.url}}" alt="" /></a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Brand area end -->
+
+        
+
+    {% comment %} <!-- Modal -->
+    <div class="modal modal-2 fade" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="pe-7s-close"></i></button>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
+                            <!-- Swiper -->
+                            <div class="swiper-container gallery-top">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/1.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/2.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/3.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/4.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/5.webp" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-container gallery-thumbs mt-20px slider-nav-style-1 small-nav">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/1.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/2.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/3.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/4.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/5.webp" alt="">
+                                    </div>
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="swiper-buttons">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
+                            <div class="product-details-content quickview-content">
+                                <h2>Modern Smart Phone</h2>
+                                <div class="pricing-meta">
+                                    <ul class="d-flex">
+                                        <li class="new-price">$20.90</li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-rating-wrap">
+                                    <div class="rating-product">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <span class="read-review"><a class="reviews" href="#">( 2 Review )</a></span>
+                                </div>
+                                <p class="mt-30px">Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmll tempor incididunt ut labore et dolore magna aliqua. Ut enim ad mill veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exet commodo consequat. Duis aute irure dolor</p>
+                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                    <span>SKU:</span>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a href="#">Ch-256xl</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                    <span>Categories: </span>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a href="#">Smart Device, </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">ETC</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                    <span>Tags: </span>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a href="#">Smart Device, </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Phone</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-quality">
+                                    <div class="cart-plus-minus">
+                                        <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                    </div>
+                                    <div class="pro-details-cart">
+                                        <button class="add-cart"> Add To
+                                            Cart</button>
+                                    </div>
+                                    <div class="pro-details-compare-wishlist pro-details-wishlist ">
+                                        <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                    </div>
+                                </div>
+                                <div class="payment-img">
+                                    <a href="#"><img src="assets/images/icons/payment.png" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+    <!-- Modal end -->
+    {% comment %} <!-- Modal Cart -->
+    <div class="modal customize-class fade" id="exampleModal-Cart" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                    <div class="tt-modal-messages">
+                        <i class="pe-7s-check"></i> Added to cart successfully!
+                    </div>
+                    <div class="tt-modal-product">
+                        <div class="tt-img">
+                            <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        </div>
+                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
+    <!-- Modal wishlist -->
+    <div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                    <div class="tt-modal-messages">
+                        <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                    </div>
+                    <div class="tt-modal-product">
+                        <div class="tt-img">
+                            <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        </div>
+                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <!-- Modal compare -->
+    <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                    <div class="tt-modal-messages">
+                        <i class="pe-7s-check"></i> Added to compare successfully!
+                    </div>
+                    <div class="tt-modal-product">
+                        <div class="tt-img">
+                            <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        </div>
+                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> {% endcomment %}
+{% endblock content %}
+
+
+    
+
+
+
+    

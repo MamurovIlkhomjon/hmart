@@ -1,0 +1,521 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- offcanvas overlay start -->
+<div class="offcanvas-overlay"></div>
+<!-- offcanvas overlay end -->
+<!-- OffCanvas Wishlist Start -->
+<div id="offcanvas-wishlist" class="offcanvas offcanvas-wishlist">
+    <div class="inner">
+        <div class="head">
+            <span class="title">Wishlist</span>
+            <button class="offcanvas-close">×</button>
+        </div>
+        <div class="body customScroll">
+            <ul class="minicart-product-list">
+                {% for prod in products_wishlist %}
+                <li>
+                    <a href="{% url 'single_product' prod.product.id %}" class="image"><img src="{{prod.product.images.image.url}}" alt="Cart product Image"></a>
+                    <div class="content">
+                        <a href="{% url 'single_product' prod.product.id %}" class="title">{{prod.product.title}}</a>
+                        {% comment %} {% if prod.product.discount > 0 %} {% endcomment %}
+                        {% comment %} <span class="quantity-price"><span class="amount"><s>${{prod.product.price}}</s> - ${{prod.product.discount_price}}</span></span> {% endcomment %}
+                        {% comment %} {% else %} {% endcomment %}
+                        <span class="quantity-price"><span class="amount">${{prod.product.price}}</span></span>
+                        {% comment %} {% endif %} {% endcomment %}
+                        {% comment %} <a href="{% url 'delete_wishlist' prod.product.id %}" class="remove">×</a> {% endcomment %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="foot">
+            <div class="buttons">
+                <a href="{% url 'wishlist' %}" class="btn btn-dark btn-hover-primary mt-30px">view wishlist</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- OffCanvas Wishlist End -->
+
+<!-- OffCanvas Cart Start -->
+<div id="offcanvas-cart" class="offcanvas offcanvas-cart">
+    <div class="inner">
+        <div class="head">
+            <span class="title">Cart</span>
+            <button class="offcanvas-close">×</button>
+        </div>
+        <div class="body customScroll">
+            <ul class="minicart-product-list">
+                {% for product in products_cart %}
+                <li>
+                    <a href="{% url 'single_product' product.product.id %}" class="image"><img src="{{product.product.images.image.url}}" alt="Cart product Image"></a>
+                    <div class="content">
+                        <a href="{% url 'single_product' product.product.id %}" class="title">{{product.product.title}}</a>
+                        {% comment %} {% if product.product.discount > 0 %} {% endcomment %}
+                        {% comment %} <span class="quantity-price">{{product.count}} x <span class="amount"><s>${{product.product.price}}</s> - ${{product.product.discount_price}}</span></span> {% endcomment %}
+                        {% comment %} {% else %} {% endcomment %}
+                        <span class="quantity-price">{{product.count}} x <span class="amount">${{product.product.price}}</span></span>
+                        {% comment %} {% endif %} {% endcomment %}
+                        {% comment %} <a href="{% url 'delete_item' product.product.id %}" class="remove">×</a> {% endcomment %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="foot">
+            <div class="buttons mt-30px">
+                <a href="{% url 'cart' %}" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
+                <a href="{% url 'checkout' %}" class="btn btn-outline-dark current-btn">checkout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <!-- breadcrumb-area start -->
+        <div class="breadcrumb-area">
+            <div class="container">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-12 text-center">
+                        <h2 class="breadcrumb-title">Product Page</h2>
+                        <!-- breadcrumb-list start -->
+                        <ul class="breadcrumb-list">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="breadcrumb-item active">Shop</li>
+                        </ul>
+                        <!-- breadcrumb-list end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- breadcrumb-area end -->
+
+        <!-- Shop Page Start  -->
+        <div class="shop-category-area pt-100px pb-100px">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9 order-lg-last col-md-12 order-md-first">
+                        <!-- Shop Top Area Start -->
+                        <div class="shop-top-bar d-flex">
+                            <p class="compare-product"> <span>{{ page_objects.number }}</span> Product Found of <span>{{ page_objects.paginator.num_pages }}</span></p>
+                            <!-- Left Side End -->
+                            <div class="shop-tab nav">
+                                <button class="active" data-bs-target="#shop-grid" data-bs-toggle="tab">
+                                    <i class="fa fa-th" aria-hidden="true"></i>
+                                </button>
+                                <button data-bs-target="#shop-list" data-bs-toggle="tab">
+                                    <i class="fa fa-list" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Shop Top Area End -->
+                        <!-- Shop Bottom Area Start -->
+                        <div class="shop-bottom-area">
+                            <!-- Tab Content Area Start -->
+                            <div class="row">
+                                <div class="col">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade show active" id="shop-grid">
+                                            <div class="row mb-n-30px">
+                                                {% for product in page_objects %}
+                                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6 mb-30px">
+                                                    <!-- Single Prodect -->
+                                                    <div class="product">
+                                                        <span class="badges">
+                                                        {% comment %} <span class="new">-{{product.discount}} %</span> {% endcomment %}
+                                                        </span>
+                                                        <div class="thumb">
+                                                            <a href="{% url 'single_product' product.id %}" class="image">
+                                                                <img src="{{product.images.image.url}}" alt="Product" />
+                                                                <img class="hover-image" src="{{product.images.image.url}}" alt="Product" />
+                                                            </a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <span class="category"><a href="#">Accessories</a></span>
+                                                            <h5 class="title"><a href="{% url 'single_product' product.id %}">{{product.title}}
+                                                                </a>
+                                                            </h5>
+                                                            <span class="price">
+                                                                {% if product.discount > 0 %}
+                                                            <span class="new"><s>${{product.price}}</s>-${{product.discount_price}}</span>
+                                                            </span>
+                                                            {% else %}
+                                                            <span class="new">${{product.price}}</span>
+                                                            </span>
+                                                            {% endif %}
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+
+                                                <!--  Pagination Area Start -->
+                                                    <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up" data-aos-delay="200">
+                                                        <div class="pages">
+                                                            <ul>
+                                                                {% comment %} <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
+                                                                </li> {% endcomment %}
+                                                                {% if page_objects.has_previous %}
+                                                                <li class="li"><a class="page-link" href="?page=1">first</a></li>
+                                                                <li class="li"><a class="page-link active" href="?page={{ page_objects.previous_page_number }}">{{ page_objects.previous_page_number }}</a></li>
+                                                                {% endif %}
+                                                                Page {{ page_objects.number }} of {{ page_objects.paginator.num_pages }}.
+                                                                {% if page_objects.has_next %}
+                                                                <li class="li"><a class="page-link" href="?page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}</a></li>
+                                                                <li class="li"><a class="page-link" href="?page={{ page_objects.paginator.num_pages }}">last</a></li>
+                                                                {% endif %}
+                                                                {% comment %} <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a>
+                                                                </li> {% endcomment %}
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                <!--  Pagination Area End -->
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade mb-n-30px" id="shop-list">
+                                            {% for product in page_objects %}
+                                            
+                                            <div class="shop-list-wrapper mb-30px">
+                                                <div class="row">
+                                                    <div class="col-md-5 col-lg-5 col-xl-4 mb-lm-30px">
+                                                        <div class="product">
+                                                            <div class="thumb">
+                                                                <a href="{% url 'single_product' product.id %}" class="image">
+                                                                    <img style="height: 250px;" src="{{product.images.image.url}}" alt="Product" />
+                                                                    <img class="hover-image" src="{{product.images.image.url}}" alt="Product" />
+                                                                </a>
+                                                                <span class="badges">
+                                                                {% comment %} <span class="new">-{{product.discount}}%</span> {% endcomment %}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-7 col-lg-7 col-xl-8">
+                                                        <div class="content-desc-wrap">
+                                                            <div class="content">
+                                                                <span class="category"><a href="#">Accessories</a></span>
+                                                                <h5 class="title"><a href="{% url 'single_product' product.id %}">{{product.title}}</a></h5>
+                                                                <p>{{product.discreption}}</p>
+                                                            </div>
+                                                            <div class="box-inner">
+                                                                <span class="price">
+                                                                <span class="new">${{product.price}}</span>
+                                                                </span>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                            <!--  Pagination Area Start -->
+                                                <div class="pro-pagination-style text-center text-lg-end" data-aos="fade-up" data-aos-delay="200">
+                                                    <div class="pages">
+                                                        <ul>
+                                                            {% comment %} <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-left"></i></a>
+                                                            </li> {% endcomment %}
+                                                            {% if page_objects.has_previous %}
+                                                            <li class="li"><a class="page-link" href="?page=1">first</a></li>
+                                                            <li class="li"><a class="page-link active" href="?page={{ page_objects.previous_page_number }}">{{ page_objects.previous_page_number }}</a></li>
+                                                            {% endif %}
+                                                            Page {{ page_objects.number }} of {{ page_objects.paginator.num_pages }}.
+                                                            {% if page_objects.has_next %}
+                                                            <li class="li"><a class="page-link" href="?page={{ page_objects.next_page_number }}">{{ page_objects.next_page_number }}</a></li>
+                                                            <li class="li"><a class="page-link" href="?page={{ page_objects.paginator.num_pages }}">last</a></li>
+                                                            {% endif %}
+                                                            {% comment %} <li class="li"><a class="page-link" href="#"><i class="fa fa-angle-right"></i></a>
+                                                            </li> {% endcomment %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            <!--  Pagination Area End -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Tab Content Area End -->      
+                        </div>
+            
+                        <!-- Shop Bottom Area End -->
+                    </div>
+                    <!-- Sidebar Area Start -->
+                    <div class="col-lg-3 order-lg-first col-md-12 order-md-last">
+                        <div class="shop-sidebar-wrap">
+                            <!-- Sidebar single item -->
+                            <div class="sidebar-widget">
+                                <h4 class="sidebar-title">Top Categories</h4>
+                                <div class="sidebar-widget-category">
+                                    <ul>
+                                        <li><a href="{% url 'shop' %}" class="selected m-0"> All
+                                        <span>({{all}})</span> </a></li>
+                                            {% for category in categories %}   
+                                            <li><a href="{% url 'detail_category' category.id %}" class=""> {{category}}
+                                                <span></span>({{category.product_category_count}})</a></li>                                                
+                                            {% endfor %}  
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Sidebar single item -->
+                            <div class="sidebar-widget mt-8">
+                                <h4 class="sidebar-title">Price Filter</h4>
+                                <form method="post"> {% csrf_token %} 
+                                    <input style="display:none;" type="text" name="category" value=''>
+                                    
+                                    <input style="width: 90px;height:30px;" type="text" name="start_price">
+                                    <span>to</span> 
+                                    <input type="text" style="height: 30px; width:90px;" name="end_price">
+                                    <div>
+                                        <button type="submit" style="color: rgb(243, 243, 244); margin-left: 75%; margin-top: 10px;  background: rgb(77, 3, 249);">save</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- Sidebar single item -->
+                            <!-- <div class="sidebar-widget">
+                                <h4 class="sidebar-title">Color</h4>
+                                <div class="sidebar-widget-color">
+                                    <ul class="d-flex flex-wrap">
+                                        <li><a href="#" class="color-1"></a></li>
+                                        <li><a href="#" class="color-2"></a></li>
+                                        <li><a href="#" class="color-3"></a></li>
+                                        <li><a href="#" class="color-4"></a></li>
+                                        <li><a href="#" class="color-5"></a></li>
+                                        <li><a href="#" class="color-6"></a></li>
+                                        <li><a href="#" class="color-7"></a></li>
+                                        <li><a href="#" class="color-8"></a></li>
+                                        <li><a href="#" class="color-9"></a></li>
+                                        <li><a href="#" class="color-10"></a></li>
+                                        <li><a href="#" class="color-11"></a></li>
+                                        <li><a href="#" class="color-12"></a></li>
+                                        <li><a href="#" class="color-13"></a></li>
+                                        <li><a href="#" class="color-14"></a></li>
+                                    </ul>
+                                </div>
+                            </div> -->
+                            <!-- Sidebar single item -->
+                            {% comment %} <div class="sidebar-widget">
+                                <h4 class="sidebar-title">Size</h4>
+                                <div class="sidebar-widget-size">
+                                    <ul>
+                                        <li><a href="#" class="selected m-0"> All
+                                                <span>(6)</span> </a></li>
+                                        <li><a href="#" class=""> S <span>(12)</span> </a>
+                                        </li>
+                                        <li><a href="#" class=""> M <span>(21)</span> </a>
+                                        </li>
+                                        <li><a href="#" class=""> L <span>(16)</span> </a>
+                                        </li>
+                                        <li><a href="#" class=""> XL <span>(22)</span> </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> {% endcomment %}
+                            <!-- Sidebar single item -->
+                            <!-- Sidebar single item -->
+                            <div class="sidebar-widget">
+                                <h4 class="sidebar-title">Brands</h4>
+                                <div class="sidebar-widget-brand">
+                                    <ul>
+                                        <li><a href=""{% url 'shop' %} class="selected m-0"> All<span>({{all}})</span> </a></li>
+                                        {% for brand in brands %}
+                                        <li><a href="{% url 'detail_brand' brand.id %}" class="selected m-0">{{brand.title}}<span>({{brand.product_brand_count}})</span> </a></li>
+                                    
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Sidebar single item -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Shop Page End  -->
+    </div>
+    <!-- Modal -->
+    <div class="modal modal-2 fade" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> <i class="pe-7s-close"></i></button>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-xs-12 mb-lm-30px mb-md-30px mb-sm-30px">
+                            <!-- Swiper -->
+                            <div class="swiper-container gallery-top">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/1.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/2.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/3.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/4.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/zoom-image/5.webp" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-container gallery-thumbs mt-20px slider-nav-style-1 small-nav">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/1.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/2.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/3.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/4.webp" alt="">
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <img class="img-responsive m-auto" src="assets/images/product-image/small-image/5.webp" alt="">
+                                    </div>
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="swiper-buttons">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-xs-12" data-aos="fade-up" data-aos-delay="200">
+                            <div class="product-details-content quickview-content">
+                                <h2>Modern Smart Phone</h2>
+                                <div class="pricing-meta">
+                                    <ul class="d-flex">
+                                        <li class="new-price">$20.90</li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-rating-wrap">
+                                    <div class="rating-product">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <span class="read-review"><a class="reviews" href="#">( 2 Review )</a></span>
+                                </div>
+                                <p class="mt-30px">Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmll tempor incididunt ut labore et dolore magna aliqua. Ut enim ad mill veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exet commodo consequat. Duis aute irure dolor</p>
+                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                    <span>SKU:</span>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a href="#">Ch-256xl</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                    <span>Categories: </span>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a href="#">Smart Device, </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">ETC</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-categories-info pro-details-same-style d-flex m-0">
+                                    <span>Tags: </span>
+                                    <ul class="d-flex">
+                                        <li>
+                                            <a href="#">Smart Device, </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Phone</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="pro-details-quality">
+                                    <div class="cart-plus-minus">
+                                        <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                    </div>
+                                    <div class="pro-details-cart">
+                                        <button class="add-cart"> Add To
+                                            Cart</button>
+                                    </div>
+                                    <div class="pro-details-compare-wishlist pro-details-wishlist ">
+                                        <a href="wishlist.html"><i class="pe-7s-like"></i></a>
+                                    </div>
+                                </div>
+                                <div class="payment-img">
+                                    <a href="#"><img src="assets/images/icons/payment.png" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal end -->
+    <!-- Modal Cart -->
+    <div class="modal customize-class fade" id="exampleModal-Cart" tabindex="-1"   aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                    <div class="tt-modal-messages">
+                        <i class="pe-7s-check"></i> Added to cart successfully!
+                    </div>
+                    <div class="tt-modal-product">
+                        <div class="tt-img">
+                            <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        </div>
+                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
+    <!-- Modal wishlist -->
+    <div class="modal customize-class fade" id="exampleModal-Wishlist" tabindex="-1"   aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                    <div class="tt-modal-messages">
+                        <i class="pe-7s-check"></i> Added to Wishlist successfully!
+                    </div>
+                    <div class="tt-modal-product">
+                        <div class="tt-img">
+                            <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        </div>
+                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <!-- Modal compare -->
+    <div class="modal customize-class fade" id="exampleModal-Compare" tabindex="-1"   aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="pe-7s-close"></i></button>
+                    <div class="tt-modal-messages">
+                        <i class="pe-7s-check"></i> Added to compare successfully!
+                    </div>
+                    <div class="tt-modal-product">
+                        <div class="tt-img">
+                            <img src="assets/images/product-image/1.webp" alt="Modern Smart Phone">
+                        </div>
+                        <h2 class="tt-title"><a href="#">Modern Smart Phone</a></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
